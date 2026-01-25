@@ -56,6 +56,14 @@ SECURE_HSTS_PRELOAD = True  # Allows inclusion in browser preload lists
 # Trust X-Forwarded-Proto header for HTTPS detection (proxy support)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+# Content Security Policy (basic)
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'",)
+CSP_IMG_SRC = ("'self'",)
+
+
+
 
 
 # Application definition
