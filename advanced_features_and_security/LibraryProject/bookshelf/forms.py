@@ -2,18 +2,14 @@ from django import forms
 from .models import Book
 
 
-class ExampleForm(forms.ModelForm):
-    """
-    ExampleForm is used to demonstrate secure form handling,
-    including validation and CSRF protection.
-    """
-    class Meta:
-        model = Book
-        fields = '__all__'
-
-
-# Optional: keep BookForm if already used elsewhere
+# Existing form for Book
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = '__all__'
+        fields = ['title', 'author']
+
+# ExampleForm (needed for tracker)
+class ExampleForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'author']  # You can duplicate fields for demonstration

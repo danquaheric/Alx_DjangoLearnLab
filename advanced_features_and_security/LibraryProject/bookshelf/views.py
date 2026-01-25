@@ -60,3 +60,11 @@ def create_book(request):
         form.save()
     return render(request, 'bookshelf/form_example.html', {'form': form})
 
+@permission_required('bookshelf.can_create', raise_exception=True)
+def create_example(request):
+    form = ExampleForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+    return render(request, 'bookshelf/form_example.html', {'form': form})
+
+
