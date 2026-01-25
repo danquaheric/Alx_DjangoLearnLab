@@ -48,6 +48,12 @@ SESSION_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True
 
 
+# HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_SECONDS = 31536000  # 1 year in seconds
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True  # Allows inclusion in browser preload lists
+
+
 # Application definition
 
 INSTALLED_APPS = [
