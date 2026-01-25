@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import permission_required
 from .models import Book
-from .forms import BookForm
+from .forms import BookForm, ExampleForm
 
 
 # -----------------------------
@@ -52,3 +52,11 @@ def delete_book(request, book_id):
     if request.method == "POST":
         book.delete()
     return render(request, 'bookshelf/delete_book.html', {'book': book})
+
+@permission_required('bookshelf.can_create', raise_exception=True)
+def create_book(request):
+    form = ExampleForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+    return render(request, 'bookshelf/form_example.html', {'form': form})
+
