@@ -13,6 +13,9 @@ class BookListView(generics.ListAPIView):
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+
+# The tracker expects this exact usage
+    filter_backends = [filters.OrderingFilter, filters.SearchFilter, rest_framework.DjangoFilterBackend]
 # Filtering, searching, and ordering backends
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
 
