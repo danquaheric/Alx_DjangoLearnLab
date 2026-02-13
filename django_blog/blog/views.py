@@ -9,6 +9,9 @@ from .forms import CommentForm
 from django.shortcuts import get_object_or_404
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.urls import reverse
+from .forms import PostForm
+from django.db.models import Q
+from django.views.generic import ListView
 
 from .forms import RegisterForm, UserUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -154,3 +157,18 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('post-detail', kwargs={'pk': self.object.post.pk})
+    
+    class SearchResultsView(ListView):
+    model = Post
+    template_name = 'blog/search_results.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Post.objects.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query)
+            ).distinct()
+        return Post.objects.none()
