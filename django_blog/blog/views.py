@@ -4,6 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import views as auth_views
+from .models import Post, Comment
+from .forms import CommentForm
+from django.shortcuts import get_object_or_404
+from django.views.generic import CreateView, UpdateView, DeleteView
+from django.urls import reverse
 
 from .forms import RegisterForm, UserUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -112,3 +117,40 @@ def profile_view(request):
         form = UserUpdateForm(instance=request.user)
 
     return render(request, 'blog/profile.html', {'form': form})
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/comment_form.html'
+
+    def form_valid(self, form):
+        post = get_object_or_404(Post, pk=self.kwargs['pk'])
+        form.instance.post = post
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('post-detail', kwargs={'pk': self.kwargs['pk']})
+    
+    class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/comment_form.html'
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+
+    def get_success_url(self):
+        return reverse('post-detail', kwargs={'pk': self.object.post.pk})
+    
+    class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = 'blog/comment_confirm_delete.html'
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+
+    def get_success_url(self):
+        return reverse('post-detail', kwargs={'pk': self.object.post.pk})
