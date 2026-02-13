@@ -17,6 +17,13 @@
 
 <hr>
 <h3>Comments</h3>
+<p><strong>Tags:</strong>
+    {% for tag in object.tags.all %}
+        <a href="{% url 'tag-posts' tag.name %}">{{ tag.name }}</a>
+    {% empty %}
+        No tags
+    {% endfor %}
+</p>
 
 {% for comment in object.comments.all %}
     <div>

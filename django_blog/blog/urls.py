@@ -8,6 +8,8 @@ from .views import (
     CommentCreateView,
     CommentUpdateView,
     CommentDeleteView,
+    SearchResultsView, 
+    TagPostsView
 )
 
 urlpatterns = [
